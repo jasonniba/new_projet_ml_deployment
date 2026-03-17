@@ -1,0 +1,33 @@
+name : CI Pipeline
+
+on:
+  push:
+    banches:
+      -main
+      -develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: acions/setup-python@v4
+        with:
+          python-version: 3.9
+
+
+      - name: Install dependencies
+        run: |
+          python -m pip instrall --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest --maxfail=1 --disable-warnings -q
+
+          
