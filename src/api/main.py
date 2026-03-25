@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from src.model import predict_model
 
 app = FastAPI()
 
@@ -13,6 +14,5 @@ def root():
 
 @app.post("/predict")
 def predict(data: InputData):
-    # Fake modèle pour test
-    result = data.feature1 + data.feature2
+    result = predict_model(data.feature1, data.feature2)
     return {"prediction": result}
