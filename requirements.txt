@@ -1,8 +1,8 @@
+gradio
+pandas
+joblib
+scikit-learn
 fastapi
 uvicorn
-pydantic
-pytest
-httpx
 sqlalchemy
 psycopg2-binary
-gradio
