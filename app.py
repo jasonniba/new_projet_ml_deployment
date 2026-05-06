@@ -1,18 +1,160 @@
 import gradio as gr
-from src.model import predict_model
 
-def predict(feature1, feature2):
-    return predict_model(feature1, feature2)
+from src.api.main import InputData
+from src.api.model import predict_model
+
+
+def predict(
+    id_employee,
+    age,
+    genre,
+    revenu_mensuel,
+    statut_marital,
+    departement,
+    poste,
+    domaine_etude,
+    frequence_deplacement,
+    heure_supplementaires,
+    nombre_experiences_precedentes,
+    nombre_heures_travailless,
+    annee_experience_totale,
+    annees_dans_l_entreprise,
+    annees_dans_le_poste_actuel,
+    satisfaction_employee_environnement,
+    note_evaluation_precedente,
+    niveau_hierarchique_poste,
+    satisfaction_employee_nature_travail,
+    satisfaction_employee_equipe,
+    satisfaction_employee_equilibre_pro_perso,
+    note_evaluation_actuelle,
+    augementation_salaire_precedente,
+    nombre_participation_pee,
+    nb_formations_suivies,
+    nombre_employee_sous_responsabilite,
+    distance_domicile_travail,
+    niveau_education,
+    ayant_enfants,
+    annees_depuis_la_derniere_promotion,
+    annes_sous_responsable_actuel,
+    salary_increase_rate,
+    relative_tenure,
+    satisfaction_workload_ratio,
+):
+    data = InputData(
+        id_employee=id_employee,
+        age=age,
+        genre=genre,
+        revenu_mensuel=revenu_mensuel,
+        statut_marital=statut_marital,
+        departement=departement,
+        poste=poste,
+        domaine_etude=domaine_etude,
+        frequence_deplacement=frequence_deplacement,
+        heure_supplementaires=heure_supplementaires,
+        nombre_experiences_precedentes=nombre_experiences_precedentes,
+        nombre_heures_travailless=nombre_heures_travailless,
+        annee_experience_totale=annee_experience_totale,
+        annees_dans_l_entreprise=annees_dans_l_entreprise,
+        annees_dans_le_poste_actuel=annees_dans_le_poste_actuel,
+        satisfaction_employee_environnement=satisfaction_employee_environnement,
+        note_evaluation_precedente=note_evaluation_precedente,
+        niveau_hierarchique_poste=niveau_hierarchique_poste,
+        satisfaction_employee_nature_travail=satisfaction_employee_nature_travail,
+        satisfaction_employee_equipe=satisfaction_employee_equipe,
+        satisfaction_employee_equilibre_pro_perso=satisfaction_employee_equilibre_pro_perso,
+        note_evaluation_actuelle=note_evaluation_actuelle,
+        augementation_salaire_precedente=augementation_salaire_precedente,
+        nombre_participation_pee=nombre_participation_pee,
+        nb_formations_suivies=nb_formations_suivies,
+        nombre_employee_sous_responsabilite=nombre_employee_sous_responsabilite,
+        distance_domicile_travail=distance_domicile_travail,
+        niveau_education=niveau_education,
+        ayant_enfants=ayant_enfants,
+        annees_depuis_la_derniere_promotion=annees_depuis_la_derniere_promotion,
+        annes_sous_responsable_actuel=annes_sous_responsable_actuel,
+        salary_increase_rate=salary_increase_rate,
+        relative_tenure=relative_tenure,
+        satisfaction_workload_ratio=satisfaction_workload_ratio,
+    )
+
+    prediction, probability = predict_model(data)
+
+    label = "Quitte" if int(prediction) == 1 else "Reste"
+    probability_percent = round(float(probability) * 100, 2) if probability is not None else None
+
+    return int(prediction), label, f"{probability_percent}%" if probability_percent is not None else "Non disponible"
+
 
 demo = gr.Interface(
     fn=predict,
     inputs=[
-        gr.Number(label="Feature 1"),
-        gr.Number(label="Feature 2")
+        gr.Number(value=1001, label="ID Employé"),
+        gr.Number(value=35, label="Âge"),
+        gr.Dropdown(["F", "M"], value="M", label="Genre"),
+        gr.Number(value=4500, label="Revenu mensuel"),
+        gr.Dropdown(["Célibataire", "Marié(e)", "Divorcé(e)"], value="Marié(e)", label="Statut marital"),
+        gr.Dropdown(["Commercial", "Consulting", "Ressources Humaines"], value="Consulting", label="Département"),
+        gr.Dropdown(
+            [
+                "Assistant de Direction",
+                "Cadre Commercial",
+                "Consultant",
+                "Directeur Technique",
+                "Manager",
+                "Représentant Commercial",
+                "Ressources Humaines",
+                "Senior Manager",
+                "Tech Lead",
+            ],
+            value="Consultant",
+            label="Poste",
+        ),
+        gr.Dropdown(
+            [
+                "Autre",
+                "Entrepreunariat",
+                "Infra & Cloud",
+                "Marketing",
+                "Ressources Humaines",
+                "Transformation Digitale",
+            ],
+            value="Infra & Cloud",
+            label="Domaine étude",
+        ),
+        gr.Dropdown(["Aucun", "Frequent", "Occasionnel"], value="Frequent", label="Fréquence déplacement"),
+        gr.Dropdown(["Oui", "Non"], value="Oui", label="Heures supplémentaires"),
+        gr.Number(value=3, label="Nombre expériences précédentes"),
+        gr.Number(value=40, label="Nombre heures travaillées"),
+        gr.Number(value=10, label="Années expérience totale"),
+        gr.Number(value=5, label="Années dans l'entreprise"),
+        gr.Number(value=3, label="Années dans le poste actuel"),
+        gr.Number(value=4, label="Satisfaction environnement"),
+        gr.Number(value=3, label="Note évaluation précédente"),
+        gr.Number(value=2, label="Niveau hiérarchique"),
+        gr.Number(value=4, label="Satisfaction nature travail"),
+        gr.Number(value=4, label="Satisfaction équipe"),
+        gr.Number(value=3, label="Équilibre pro/perso"),
+        gr.Number(value=4, label="Note évaluation actuelle"),
+        gr.Number(value=0.12, label="Augmentation salaire précédente"),
+        gr.Number(value=1, label="Participation PEE"),
+        gr.Number(value=2, label="Formations suivies"),
+        gr.Number(value=4, label="Employés sous responsabilité"),
+        gr.Number(value=12, label="Distance domicile-travail"),
+        gr.Number(value=3, label="Niveau éducation"),
+        gr.Dropdown([0, 1], value=1, label="Ayant enfants"),
+        gr.Number(value=1, label="Années depuis dernière promotion"),
+        gr.Number(value=2, label="Années sous responsable actuel"),
+        gr.Number(value=0.08, label="Salary increase rate"),
+        gr.Number(value=0.45, label="Relative tenure"),
+        gr.Number(value=0.10, label="Satisfaction workload ratio"),
     ],
-    outputs=gr.Number(label="Prediction"),
-    title="ML Prediction App",
-    description="Interface pour tester le modèle"
+    outputs=[
+        gr.Number(label="Prediction"),
+        gr.Textbox(label="Label"),
+        gr.Textbox(label="Probabilité"),
+    ],
+    title="Prédiction Attrition Employé",
+    description="Interface Gradio pour prédire le risque d’attrition d’un employé.",
 )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
