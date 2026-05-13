@@ -1,0 +1,23 @@
+site_name: Documentation Projet ML Attrition
+site_description: Documentation technique du projet ML de prédiction d'attrition employé
+site_author: Jason Niba
+
+nav:
+  - Accueil: index.md
+  - Architecture: architecture.md
+  - API FastAPI: api.md
+  - Modèle ML: model.md
+  - Base de données: database.md
+  - Tests: tests.md
+  - Déploiement: deployment.md
+  - Maintenance: maintenance.md
+
+theme:
+  name: readthedocs
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - fenced_code
+  - tables
+  - admonition
